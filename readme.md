@@ -30,5 +30,5 @@ $clippingDemo->exportToMarkdown('kindeNote.markdown');
 ### WEB应用程序
 使用这种方式运行**KindleNote**，您需要在服务器中配置**HTTP服务器**、**数据库**等，并且可能需要使用**Composer**与**Npm**安装依赖的程序包。
 
-##版权##
+## 版权
 本软件遵循**GPL (GNU GENERAL PUBLIC LICENSE，*GNU通用公共许可证*)**。
