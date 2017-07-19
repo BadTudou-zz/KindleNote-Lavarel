@@ -5,10 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <!-- bootstrap css -->
+        <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+        <!-- font-awesome css -->
+        <link href="{{asset('css/font-awesome.css')}}" rel="stylesheet">
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link href="../../public/css/Raleway.css" rel="stylesheet" type="text/css">
 
         <!-- Styles -->
         <style>
@@ -78,18 +82,27 @@
             @endif
 
             <div class="content">
+                <img src="{{URL::asset('/images/logo.png')}}">
                 <div class="title m-b-md">
-                    Laravel
+                    {{ config('app.name', 'Laravel') }}
                 </div>
+                <h5>Export your kindle highlights and notes !</h5>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                {{--<div class="links">--}}
+                    {{--<a href="https://laravel.com/docs">Documentation</a>--}}
+                    {{--<a href="https://laracasts.com">Laracasts</a>--}}
+                    {{--<a href="https://laravel-news.com">News</a>--}}
+                    {{--<a href="https://forge.laravel.com">Forge</a>--}}
+                    {{--<a href="https://github.com/laravel/laravel">GitHub</a>--}}
+                {{--</div>--}}
+
+                <div id="social" style="color: #1b95e0">
+                    <a type="button"  class="btn btn-secondary btn-sm" href="https://github.com/badtudou"><i class="fa fa-github fa-2x" aria-hidden="true"></i>&nbsp;GitHub</a>
+                    <a type="button"  class="btn btn-secondary btn-sm" href="https://www.zhihu.com/people/du-xiao-dou-"><i class="fa fa-twitter fa-2x" aria-hidden="true"></i>&nbsp;Twitter</a>
+                    <a type="button"  class="btn btn-secondary btn-sm" href="https://www.zhihu.com/people/du-xiao-dou-"><i class="fa fa-facebook fa-2x" aria-hidden="true"></i>&nbsp;Facebook</a>
                 </div>
             </div>
         </div>
+
     </body>
 </html>
