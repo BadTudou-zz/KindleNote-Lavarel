@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="container col-lg-12">
-
         <!--toolbar -->
         <div class="col-lg-offset-8">
             <button type="button" class="btn btn-link"><a href="{{ action('NoteController@create')}}"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;添加</a></button>
@@ -24,7 +23,38 @@
                         <i class="fa fa-cloud-download" aria-hidden="true"></i>&nbsp;Download
                     </a>
                 </button>
+            @else
+                <button class="btn btn-secondary btn-sm btn-link" style="background-color: #FFF;" disabled>
+                    <span style="color:#373a3c; ">
+                        <i class="fa fa-cloud-download" aria-hidden="true"></i>&nbsp;<s>Download</s>
+                    </span>
+                    </button>
             @endif
+
+
+        </div>
+        <!-- search result -->
+        @if(isset($searchInput))
+            <div class="col-lg-offset-1 col-lg-2">
+                <i class="fa fa-search" aria-hidden="true">:{{$searchInput}}</i>
+                <span class="badge badge-primary" style="background-color: #006de0">{{$searchResultNumber}}</span>
+            </div>
+            <div class="col-lg-offset-5 col-lg-4">
+            @else
+            <div class="col-lg-offset-8 col-lg-4">
+            @endif
+            <form id="search-form" action="{{action('NoteController@search')}}" method="GET" style="margin:0px;display:inline;">
+                {{ csrf_field() }}
+                <div id="div-searchbox" class="input-group">
+                    <input type="text" name="searchInput" class="form-control" placeholder="笔记标题">
+                        <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="submit"><i class="fa fa-search" aria-hidden="true" onclick="
+                                event.preventDefault();
+                                document.getElementById('search-form').submit();"></i>搜索
+                            </button>
+                        </span>
+                </div>
+            </form>
         </div>
 
         <!-- notes list -->
@@ -33,14 +63,16 @@
                 <div class="card col-lg-4" style="display: block;">
                     <div class="card-block">
                         <h4 class="card-title">
-                            <a href={{action('NoteController@show', ['id' => $note->id])}}>{{str_limit($note->title, 12)}}</a>
+                            <a href="{{action('NoteController@show', ['id' => $note->id])}}" title="{{$note->title}}">{{str_limit(html_entity_decode($note->title), 18)}}</a>
                         </h4>
                         <h6 class="card-subtitle"> {{str_limit($note->author, 36)}}</h6>
-                        <h6 class="card-subtitle text-muted" style="margin-top: 5px;"> {{$note->dateTime}}</h6>
                     </div>
-                    <!-- operation of the notes -->
                     <div class="card-block" style="margin: 0px; padding: 0px">
+                        <p class="card-subtitle text-muted" style="margin-top: 5px;"><small>{{$note->dateTime}}</small></p>
+
                         <p class="card-text" style="height: 70px;">{{str_limit($note->text,120)}}</p>
+
+                        <!-- operation of the notes -->
                         <a href="{{action('NoteController@edit', ['id' => $note->id])}}" class="card-link" > <i class="fa fa-1x fa-pencil" aria-hidden="true"></i>&nbsp;编辑</a>
 
                         <form action="{{action('NoteController@markdown',['id' => $note->id])}}" method="GET" style="display: inline;">
@@ -62,8 +94,8 @@
         </div>
 
         <!-- paging -->
-        <div class="col-lg-8 col-lg-offset-6" style="float: none">
-            <div class="col-lg-6">
+        <div class="col-lg-8 col-lg-offset-7" style="float: none">
+            <div class="col-lg-5">
                 <nav aria-label="...">
                     <ul class="pagination" style="margin: 0px;">
                         @if($pagination->current == 1)
@@ -79,29 +111,37 @@
                         <li class="page-item active">
                             <a class="page-link" href="#">{{$pagination->current}}<span class="sr-only">(current)</span></a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="{{action('NoteController@index', ['page'=>$pagination->next])}}">{{$pagination->next}}</a></li>
-                        <li class="page-item">
+                        @if($pagination->current != 1)
+                                <li class="page-item"><a class="page-link" href="{{action('NoteController@index', ['page'=>$pagination->next])}}">{{$pagination->next}}</a></li>
+                        @endif
+                        @if($pagination->current == $pagination->total)
+                            <li class="page-item disabled">
+                        @else
+                             <li class="page-item">
+                        @endif
                             <a class="page-link" href="{{action('NoteController@index', ['page'=>$pagination->next])}}">Next</a>
                         </li>
                     </ul>
                 </nav>
             </div>
-            <div class="input-group col-lg-4" style="margin-top: 2px; padding-left: 0px;">
+            <div class="col-lg-3">
                 <form id="page-form" action="{{action('NoteController@index')}}" method="GET" style="margin:0px;display:inline;">
-                    {{ csrf_field() }}
-                    <div class="col-lg-5">
-                        <input type="text" class="form-control" id="page" name="page" placeholder="Page">
-                    </div>
-                    <span class="col-lg-4 " style="margin: 0px;">
-                        <button type="submit" class="btn btn-primary" onclick="
-                            event.preventDefault();
-                            document.getElementById('page-form').submit();">Go
+                    <div id="div-page" class="input-group">
+                        <input type="text" class="form-control"id="page" name="page" placeholder="Page">
+                        <span class="input-group-btn">
+       	                    <button type="submit" class="btn btn-primary" onclick="
+                                event.preventDefault();
+                                document.getElementById('page-form').submit();">
+                                Go
                         </button>
                     </span>
-                    <span class="col-lg-3 text-center">{{$pagination->total}}</b><br><small>Pages</small></span>
+                    </div>
                 </form>
-
             </div>
+            <div class="col-lg-1">
+                <span class="text-center">{{$pagination->total}}</b><br><small>Pages</small></span>
+            </div>
+
         </div>
     </div>
 @endsection

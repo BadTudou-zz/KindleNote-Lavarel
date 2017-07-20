@@ -7,6 +7,7 @@ use App\Note;
 use Illuminate\Support\Facades\Redirect;
 use Validator;
 use Auth;
+use DB;
 use Illuminate\Support\Facades\Storage;
 
 class NoteController extends Controller
@@ -160,6 +161,31 @@ class NoteController extends Controller
         Storage::put('markdowns/'.$name, $markdown);
         $markdownFilePhysicsPath = storage_path().'/app/markdowns/'.$name;
         return response()->download($markdownFilePhysicsPath, trim($note->title).'.markdown')->deleteFileAfterSend(true);
+    }
+
+    public function search(Request $request)
+    {
+        //($request->page > $notesCount)
+        if($request->has('searchInput')){
+            //$notes = Auth::user()->notes->where('title','LIKE','_A%');
+            $notes = DB::table('notes')
+                ->where('user_id', Auth::id())
+                ->where('title', 'LIKE', '%'.$request->searchInput.'%')
+                ->get();
+        }else {
+            return Redirect::to(action('NoteController@index'));
+        }
+
+        $pagination = (object)['previous'=> 1,
+            'current'=> 1,
+            'next'=> 1,
+            'total'=> 1];
+
+        return view('note.index', ['notes'=>$notes,
+            'pagination'=>$pagination,
+            'searchInput'=>$request->searchInput,
+            'searchResultNumber'=>$notes->count()]);
+
     }
 
 }

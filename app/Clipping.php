@@ -40,7 +40,7 @@ class Clipping
         while (($line = fgets($resourceClippingFile)) !== false)
         {
             if (mb_substr($line, 0, self::SEPARATOR_LENGTH) === self::NOTE_SECTION_SEPARATOR) {
-                array_push($sectionsRaw, htmlentities(trim($sectionRawTemp)));
+                array_push($sectionsRaw, trim(htmlentities(trim($sectionRawTemp))));
                 $sectionRawTemp = '';
             }
             else {
