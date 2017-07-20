@@ -7,6 +7,7 @@ use App\Note;
 use Illuminate\Support\Facades\Redirect;
 use Validator;
 use Auth;
+use Illuminate\Support\Facades\Storage;
 
 class NoteController extends Controller
 {
@@ -18,7 +19,7 @@ class NoteController extends Controller
     public function index(Request $request)
     {
         // TODO:验证要跳转的页码超过总页码
-        //$notesCount = Auth::user()->notes->count()/9;
+        $notesTotal = ceil(Auth::user()->notes->count()/9);
         //($request->page > $notesCount)
         if(!$request->has('page') || ($request->page < 1) ){
             $request->page = 1;
@@ -27,7 +28,8 @@ class NoteController extends Controller
         $notes = Auth::user()->notes->forPage($request->page, 9);
         $pagination = (object)['previous'=> $request->page-1,
             'current'=> $request->page,
-            'next'=> $request->page+1];
+            'next'=> $request->page+1,
+            'total'=> $notesTotal];
 
         return view('note.index', ['notes'=>$notes, 'pagination'=>$pagination]);
 
@@ -148,6 +150,16 @@ class NoteController extends Controller
             Note::find($id)->delete();
             return Redirect::back();
         }
+    }
+
+    public function markdown($id)
+    {
+        $note = Note::find($id);
+        $markdown =  $note->coverToMarkdown();
+        $name = str_random(16).'.markdown';
+        Storage::put('markdowns/'.$name, $markdown);
+        $markdownFilePhysicsPath = storage_path().'/app/markdowns/'.$name;
+        return response()->download($markdownFilePhysicsPath, trim($note->title).'.markdown')->deleteFileAfterSend(true);
     }
 
 }

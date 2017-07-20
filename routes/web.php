@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth','prefix' => 'notes'], function()
     Route::get('create', 'NoteController@create');
     Route::post('/', 'NoteController@store');
     Route::delete('{id}', 'NoteController@destroy');
+    Route::get('/{id}/markdown', 'NoteController@markdown');
 });
 
 Route::group(['middleware' => 'auth','prefix' => 'clipping'], function()

@@ -2,6 +2,8 @@
 
 @section('content')
     <div class="container col-lg-12">
+
+        <!--toolbar -->
         <div class="col-lg-offset-8">
             <button type="button" class="btn btn-link"><a href="{{ action('NoteController@create')}}"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;添加</a></button>
             <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;多选</button>
@@ -19,37 +21,49 @@
             @if (session()->has('isDownloadMarkdown'))
                 <button class="btn btn-primary btn-sm" style="background-color: #FFF;">
                     <a href="{{action('ClippingController@download')}}" style="color:#0275d8; ">
-                        <i class="fa fa-download" aria-hidden="true"></i>&nbsp;Download
+                        <i class="fa fa-cloud-download" aria-hidden="true"></i>&nbsp;Download
                     </a>
                 </button>
             @endif
         </div>
-        <div class="col-lg-12">
+
+        <!-- notes list -->
+        <div class="col-lg-offset-1 col-lg-12">
             @forelse ($notes as $note)
-                <div class="card col-lg-4">
+                <div class="card col-lg-4" style="display: block;">
                     <div class="card-block">
                         <h4 class="card-title">
-                            <a href={{action('NoteController@show', ['id' => $note->id])}}>{{$note->title}}</a>
+                            <a href={{action('NoteController@show', ['id' => $note->id])}}>{{str_limit($note->title, 12)}}</a>
                         </h4>
-                        <h6 class="card-subtitle"> {{$note->author}}</h6>
-                        <h6 class="card-subtitle text-muted"> {{$note->dateTime}}</h6>
+                        <h6 class="card-subtitle"> {{str_limit($note->author, 36)}}</h6>
+                        <h6 class="card-subtitle text-muted" style="margin-top: 5px;"> {{$note->dateTime}}</h6>
                     </div>
-                    <div class="card-block">
-                        <p class="card-text">{{str_limit($note->text, 100)}}</p>
+                    <!-- operation of the notes -->
+                    <div class="card-block" style="margin: 0px; padding: 0px">
+                        <p class="card-text" style="height: 70px;">{{str_limit($note->text,120)}}</p>
                         <a href="{{action('NoteController@edit', ['id' => $note->id])}}" class="card-link" > <i class="fa fa-1x fa-pencil" aria-hidden="true"></i>&nbsp;编辑</a>
-                        <form action="{{action('NoteController@destroy',['id' => $note->id])}}" method="post" style="display: inline;">
+
+                        <form action="{{action('NoteController@markdown',['id' => $note->id])}}" method="GET" style="display: inline;">
+                            {{ csrf_field() }}
+                            <button type="submit" class="btn btn-link"><i class="fa fa-1x fa-download" aria-hidden="true"></i>&nbsp;下载</button>
+                        </form>
+
+                        <form action="{{action('NoteController@destroy',['id' => $note->id])}}" method="post" style="margin-left:10px; display: inline;">
                             {{ method_field('DELETE') }}
                             {{ csrf_field() }}
-                            <button type="submit" class="btn btn-link"><i class="fa fa-1x fa-trash" aria-hidden="true"></i>&nbsp;删除</button>
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-1x fa-trash" aria-hidden="true"></i>&nbsp;删除</button>
                         </form>
+
                     </div>
                 </div>
             @empty
                 <p>No notes</p>
             @endforelse
         </div>
-        <div class="col-lg-8 col-lg-offset-6">
-            <div class="col-lg-5">
+
+        <!-- paging -->
+        <div class="col-lg-8 col-lg-offset-6" style="float: none">
+            <div class="col-lg-6">
                 <nav aria-label="...">
                     <ul class="pagination" style="margin: 0px;">
                         @if($pagination->current == 1)
@@ -84,6 +98,7 @@
                             document.getElementById('page-form').submit();">Go
                         </button>
                     </span>
+                    <span class="col-lg-3 text-center">{{$pagination->total}}</b><br><small>Pages</small></span>
                 </form>
 
             </div>
