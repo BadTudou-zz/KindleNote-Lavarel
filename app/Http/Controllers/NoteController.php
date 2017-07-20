@@ -15,10 +15,22 @@ class NoteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //return view('note.index', ['notes'=>Note::all()]);
-        return view('note.index', ['notes'=>Auth::user()->notes]);
+        // TODO:验证要跳转的页码超过总页码
+        //$notesCount = Auth::user()->notes->count()/9;
+        //($request->page > $notesCount)
+        if(!$request->has('page') || ($request->page < 1) ){
+            $request->page = 1;
+        }
+
+        $notes = Auth::user()->notes->forPage($request->page, 9);
+        $pagination = (object)['previous'=> $request->page-1,
+            'current'=> $request->page,
+            'next'=> $request->page+1];
+
+        return view('note.index', ['notes'=>$notes, 'pagination'=>$pagination]);
+
     }
 
     /**
@@ -134,9 +146,8 @@ class NoteController extends Controller
     {
         if(Auth::user()->notes->find($id)){
             Note::find($id)->delete();
-            return Redirect::to(action('NoteController@index'));
+            return Redirect::back();
         }
-        echo 'destroy'.$id;
     }
 
 }
