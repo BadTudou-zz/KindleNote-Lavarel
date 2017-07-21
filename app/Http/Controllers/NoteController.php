@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use Validator;
 use Auth;
 use DB;
+use URL;
 use Illuminate\Support\Facades\Storage;
 
 class NoteController extends Controller
@@ -185,7 +186,51 @@ class NoteController extends Controller
             'pagination'=>$pagination,
             'searchInput'=>$request->searchInput,
             'searchResultNumber'=>$notes->count()]);
+    }
 
+    public function batch(Request $request)
+    {
+        $ids = explode(',', $request->ids);
+        if(!$request->has('ids') || !$request->has('action') || !$ids){
+            echo json_encode(['sate'=>false, 'action'=>$request['action'], 'ids'=>$ids]);
+            return ;
+        }
+
+        switch($request->action){
+            case 'download':
+                $markdown = '[TOC]';
+                foreach ($ids as $id){
+                    $note = Note::find($id);
+                    $noteMarkdown = $note->coverToMarkdown();
+                    $markdown .= $noteMarkdown;
+                }
+
+                $name = str_random(16).'.markdown';
+                $storeFileName = 'KindleNote共'.count($ids).'个笔记';
+                Storage::put('markdowns/'.$name, $markdown);
+                echo json_encode(['state'=>true, 'data'=> URL::action('NoteController@download', ['filename'=>$name, 'storeFilename'=>$storeFileName])]);
+                break;
+
+            case 'delete':
+                foreach ($ids as $id){
+                    if(Auth::user()->notes->find($id)){
+                        Note::find($id)->delete();
+                    }
+                }
+                echo json_encode(['state'=>true, 'data'=>URL::action('NoteController@index')]);
+                break;
+        }
+    }
+
+    public function download(Request $request)
+    {
+       if (!Auth::user()){
+           return Redirect::back();
+       }
+       $filename = $request->filename;
+       $storeFilename = $request->storeFilename;
+       $markdownFilePhysicsPath = storage_path().'/app/markdowns/'.$filename;
+       return response()->download($markdownFilePhysicsPath, trim($storeFilename).'.markdown')->deleteFileAfterSend(true);
     }
 
 }

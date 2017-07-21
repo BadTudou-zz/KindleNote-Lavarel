@@ -1,11 +1,45 @@
 @extends('layouts.app')
-
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+<script src="{{URL::asset('js/note.index.js')}}"></script>
 @section('content')
     <div class="container col-lg-12">
         <!--toolbar -->
+        <!-- blade mode -->
+        <div class="col-lg-offset-1 col-lg-3" id="div-batch">
+            <form id="batchForm" action="{{action('NoteController@batch',['action'=>'download'])}}" method="POST" style="display: inline;">
+                {{ csrf_field() }}
+                <button type="submit"  class="btn btn-primary btn-sm" onclick="batch('download')"><i class="fa fa-1x fa-download" aria-hidden="true" ></i>&nbsp;下载</button>
+            </form>
+
+            <form id="batchForm" action="{{action('NoteController@batch',['action'=>'delete'])}}" method="post" style="margin-left:10px; display: inline;">
+                {{ csrf_field() }}
+                <button type="submit" class="btn btn-danger btn-sm" onclick="batch('delete')"><i class="fa fa-1x fa-trash" aria-hidden="true"></i>&nbsp;删除</button>
+            </form>
+
+            已选择 <span id="span-chooseNoteNumber" style="color:#0275d8;">0</span> 个
+        </div>
+
         <div class="col-lg-offset-8">
             <button type="button" class="btn btn-link"><a href="{{ action('NoteController@create')}}"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;添加</a></button>
-            <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;多选</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="
+                $('.batch').removeAttr(':hidden');
+                $('.batch').toggle();
+                if(isCheckBoxShow){
+                    $('.batch').hide();
+                    $('#div-batch').hide();
+                }else{
+                    $('#div-batch').show();
+                    $('.batch').show();
+                }
+                isCheckBoxShow = !isCheckBoxShow;"
+            ><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;多选</button>
             <div class="btn-group">
                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>&nbsp;排序</button>
                 <div class="dropdown-menu">
@@ -85,6 +119,10 @@
                             {{ csrf_field() }}
                             <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-1x fa-trash" aria-hidden="true"></i>&nbsp;删除</button>
                         </form>
+
+                        <span style="float: right">
+                            <input type="checkbox" class="form-check-input batch" id="batch{{$note->id}}" name="batch[]">
+                        </span>
 
                     </div>
                 </div>
