@@ -21,17 +21,17 @@ class NoteController extends Controller
     public function index(Request $request)
     {
         // TODO:验证要跳转的页码超过总页码
-        $notesTotal = ceil(Auth::user()->notes->count()/9);
-        //($request->page > $notesCount)
+        $notesNumberPerPage = 9;
+        $notes = Note::where('user_id', Auth::id())->paginate($notesNumberPerPage);
+        $pagesTotal = ceil(Note::where('user_id', Auth::id())->count()/$notesNumberPerPage);
         if(!$request->has('page') || ($request->page < 1) ){
             $request->page = 1;
         }
 
-        $notes = Auth::user()->notes->forPage($request->page, 9);
         $pagination = (object)['previous'=> $request->page-1,
             'current'=> $request->page,
             'next'=> $request->page+1,
-            'total'=> $notesTotal];
+            'total'=> $pagesTotal];
 
         return view('note.index', ['notes'=>$notes, 'pagination'=>$pagination]);
 
@@ -63,7 +63,6 @@ class NoteController extends Controller
         ]);
 
         if ($validator->fails()) {
-            var_dump($request->all());
             // TODO: withInput() not work
             return Redirect::back()->withErrors($validator)->withInput();
         }
@@ -166,9 +165,7 @@ class NoteController extends Controller
 
     public function search(Request $request)
     {
-        //($request->page > $notesCount)
         if($request->has('searchInput')){
-            //$notes = Auth::user()->notes->where('title','LIKE','_A%');
             $notes = DB::table('notes')
                 ->where('user_id', Auth::id())
                 ->where('title', 'LIKE', '%'.$request->searchInput.'%')
@@ -198,28 +195,38 @@ class NoteController extends Controller
 
         switch($request->action){
             case 'download':
-                $markdown = '[TOC]';
-                foreach ($ids as $id){
-                    $note = Note::find($id);
-                    $noteMarkdown = $note->coverToMarkdown();
-                    $markdown .= $noteMarkdown;
-                }
-
-                $name = str_random(16).'.markdown';
-                $storeFileName = 'KindleNote共'.count($ids).'个笔记';
-                Storage::put('markdowns/'.$name, $markdown);
-                echo json_encode(['state'=>true, 'data'=> URL::action('NoteController@download', ['filename'=>$name, 'storeFilename'=>$storeFileName])]);
+                $this->batchDownload($ids);
                 break;
 
             case 'delete':
-                foreach ($ids as $id){
-                    if(Auth::user()->notes->find($id)){
-                        Note::find($id)->delete();
-                    }
-                }
-                echo json_encode(['state'=>true, 'data'=>URL::action('NoteController@index')]);
+                $this->batchDelete($ids);
                 break;
         }
+    }
+
+    private function batchDownload($ids)
+    {
+        $markdown = '[TOC]';
+        foreach ($ids as $id){
+            $note = Note::find($id);
+            $noteMarkdown = $note->coverToMarkdown();
+            $markdown .= $noteMarkdown;
+        }
+
+        $name = str_random(16).'.markdown';
+        $storeFileName = 'KindleNote共'.count($ids).'个笔记';
+        Storage::put('markdowns/'.$name, $markdown);
+        echo json_encode(['state'=>true, 'data'=> URL::action('NoteController@download', ['filename'=>$name, 'storeFilename'=>$storeFileName])]);
+    }
+
+    private function batchDelete($ids)
+    {
+        foreach ($ids as $id){
+            if(Auth::user()->notes->find($id)){
+                Note::find($id)->delete();
+            }
+        }
+        echo json_encode(['state'=>true, 'data'=>URL::action('NoteController@index')]);
     }
 
     public function download(Request $request)

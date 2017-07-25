@@ -149,7 +149,7 @@
                         <li class="page-item active">
                             <a class="page-link" href="#">{{$pagination->current}}<span class="sr-only">(current)</span></a>
                         </li>
-                        @if($pagination->current != 1)
+                        @if($pagination->next <= $pagination->total)
                                 <li class="page-item"><a class="page-link" href="{{action('NoteController@index', ['page'=>$pagination->next])}}">{{$pagination->next}}</a></li>
                         @endif
                         @if($pagination->current == $pagination->total)
