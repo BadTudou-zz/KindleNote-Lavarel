@@ -21,6 +21,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/notes/search/', 'NoteController@search');
+Route::get('/notes/download/', 'NoteController@download');
 
 Route::resource('notes', 'NoteController');
 
@@ -40,6 +42,8 @@ Route::group(['middleware' => 'auth','prefix' => 'notes'], function()
     Route::get('create', 'NoteController@create');
     Route::post('/', 'NoteController@store');
     Route::delete('{id}', 'NoteController@destroy');
+    Route::get('/{id}/markdown', 'NoteController@markdown');
+    Route::post('batch', 'NoteController@batch');
 });
 
 Route::group(['middleware' => 'auth','prefix' => 'clipping'], function()

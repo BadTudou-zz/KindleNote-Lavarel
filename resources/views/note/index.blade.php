@@ -1,10 +1,45 @@
 @extends('layouts.app')
-
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+<script src="{{URL::asset('js/note.index.js')}}"></script>
 @section('content')
     <div class="container col-lg-12">
+        <!--toolbar -->
+        <!-- blade mode -->
+        <div class="col-lg-offset-1 col-lg-3" id="div-batch">
+            <form id="batchForm" action="{{action('NoteController@batch',['action'=>'download'])}}" method="POST" style="display: inline;">
+                {{ csrf_field() }}
+                <button type="submit"  class="btn btn-primary btn-sm" onclick="batch('download')"><i class="fa fa-1x fa-download" aria-hidden="true" ></i>&nbsp;下载</button>
+            </form>
+
+            <form id="batchForm" action="{{action('NoteController@batch',['action'=>'delete'])}}" method="post" style="margin-left:10px; display: inline;">
+                {{ csrf_field() }}
+                <button type="submit" class="btn btn-danger btn-sm" onclick="batch('delete')"><i class="fa fa-1x fa-trash" aria-hidden="true"></i>&nbsp;删除</button>
+            </form>
+
+            已选择 <span id="span-chooseNoteNumber" style="color:#0275d8;">0</span> 个
+        </div>
+
         <div class="col-lg-offset-8">
             <button type="button" class="btn btn-link"><a href="{{ action('NoteController@create')}}"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;添加</a></button>
-            <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;多选</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="
+                $('.batch').removeAttr(':hidden');
+                $('.batch').toggle();
+                if(isCheckBoxShow){
+                    $('.batch').hide();
+                    $('#div-batch').hide();
+                }else{
+                    $('#div-batch').show();
+                    $('.batch').show();
+                }
+                isCheckBoxShow = !isCheckBoxShow;"
+            ><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;多选</button>
             <div class="btn-group">
                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>&nbsp;排序</button>
                 <div class="dropdown-menu">
@@ -19,36 +54,132 @@
             @if (session()->has('isDownloadMarkdown'))
                 <button class="btn btn-primary btn-sm" style="background-color: #FFF;">
                     <a href="{{action('ClippingController@download')}}" style="color:#0275d8; ">
-                        <i class="fa fa-download" aria-hidden="true"></i>&nbsp;Download
+                        <i class="fa fa-cloud-download" aria-hidden="true"></i>&nbsp;Download
                     </a>
-                    {{--onclick="event.preventDefault();--}}
-                    {{--document.location.reload();"--}}
                 </button>
+            @else
+                <button class="btn btn-secondary btn-sm btn-link" style="background-color: #FFF;" disabled>
+                    <span style="color:#373a3c; ">
+                        <i class="fa fa-cloud-download" aria-hidden="true"></i>&nbsp;<s>Download</s>
+                    </span>
+                    </button>
             @endif
+
+
         </div>
-        <div class="col-lg-12">
+        <!-- search result -->
+        @if(isset($searchInput))
+            <div class="col-lg-offset-1 col-lg-2">
+                <i class="fa fa-search" aria-hidden="true">:{{$searchInput}}</i>
+                <span class="badge badge-primary" style="background-color: #006de0">{{$searchResultNumber}}</span>
+            </div>
+            <div class="col-lg-offset-5 col-lg-4">
+            @else
+            <div class="col-lg-offset-8 col-lg-4">
+            @endif
+            <form id="search-form" action="{{action('NoteController@search')}}" method="GET" style="margin:0px;display:inline;">
+                {{ csrf_field() }}
+                <div id="div-searchbox" class="input-group">
+                    <input type="text" name="searchInput" class="form-control" placeholder="笔记标题">
+                        <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="submit"><i class="fa fa-search" aria-hidden="true" onclick="
+                                event.preventDefault();
+                                document.getElementById('search-form').submit();"></i>搜索
+                            </button>
+                        </span>
+                </div>
+            </form>
+        </div>
+
+        <!-- notes list -->
+        <div class="col-lg-offset-1 col-lg-12">
             @forelse ($notes as $note)
-                <div class="card col-lg-4">
+                <div class="card col-lg-4" style="display: block;">
                     <div class="card-block">
                         <h4 class="card-title">
-                            <a href={{action('NoteController@show', ['id' => $note->id])}}>{{$note->title}}</a>
+                            <a href="{{action('NoteController@show', ['id' => $note->id])}}" title="{{$note->title}}">{{str_limit(html_entity_decode($note->title), 18)}}</a>
                         </h4>
-                        <h6 class="card-subtitle"> {{$note->author}}</h6>
-                        <h6 class="card-subtitle text-muted"> {{$note->dateTime}}</h6>
+                        <h6 class="card-subtitle"> {{str_limit($note->author, 36)}}</h6>
                     </div>
-                    <div class="card-block">
-                        <p class="card-text">{{str_limit($note->text, 100)}}</p>
+                    <div class="card-block" style="margin: 0px; padding: 0px">
+                        <p class="card-subtitle text-muted" style="margin-top: 5px;"><small>{{$note->dateTime}}</small></p>
+
+                        <p class="card-text" style="height: 70px;">{{str_limit($note->text,120)}}</p>
+
+                        <!-- operation of the notes -->
                         <a href="{{action('NoteController@edit', ['id' => $note->id])}}" class="card-link" > <i class="fa fa-1x fa-pencil" aria-hidden="true"></i>&nbsp;编辑</a>
-                        <form action="{{action('NoteController@destroy',['id' => $note->id])}}" method="post" style="display: inline;">
+
+                        <form action="{{action('NoteController@markdown',['id' => $note->id])}}" method="GET" style="display: inline;">
+                            {{ csrf_field() }}
+                            <button type="submit" class="btn btn-link"><i class="fa fa-1x fa-download" aria-hidden="true"></i>&nbsp;下载</button>
+                        </form>
+
+                        <form action="{{action('NoteController@destroy',['id' => $note->id])}}" method="post" style="margin-left:10px; display: inline;">
                             {{ method_field('DELETE') }}
                             {{ csrf_field() }}
-                            <button type="submit" class="btn btn-link"><i class="fa fa-1x fa-trash" aria-hidden="true"></i>&nbsp;删除</button>
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-1x fa-trash" aria-hidden="true"></i>&nbsp;删除</button>
                         </form>
+
+                        <span style="float: right">
+                            <input type="checkbox" class="form-check-input batch" id="batch{{$note->id}}" name="batch[]">
+                        </span>
+
                     </div>
                 </div>
             @empty
                 <p>No notes</p>
             @endforelse
+        </div>
+
+        <!-- paging -->
+        <div class="col-lg-8 col-lg-offset-7" style="float: none">
+            <div class="col-lg-5">
+                <nav aria-label="...">
+                    <ul class="pagination" style="margin: 0px;">
+                        @if($pagination->current == 1)
+                            <li class="page-item disabled">
+                        @else
+                            <li class="page-item">
+                        @endif
+                            <a class="page-link" href="{{action('NoteController@index', ['page'=>$pagination->previous])}}" tabindex="-1">Previous</a>
+                            </li>
+                        @if($pagination->current != 1)
+                            <li class="page-item"><a class="page-link" href="{{action('NoteController@index', ['page'=>$pagination->previous])}}">{{$pagination->previous}}</a></li>
+                        @endif
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{$pagination->current}}<span class="sr-only">(current)</span></a>
+                        </li>
+                        @if($pagination->next <= $pagination->total)
+                                <li class="page-item"><a class="page-link" href="{{action('NoteController@index', ['page'=>$pagination->next])}}">{{$pagination->next}}</a></li>
+                        @endif
+                        @if($pagination->current == $pagination->total)
+                            <li class="page-item disabled">
+                        @else
+                             <li class="page-item">
+                        @endif
+                            <a class="page-link" href="{{action('NoteController@index', ['page'=>$pagination->next])}}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <form id="page-form" action="{{action('NoteController@index')}}" method="GET" style="margin:0px;display:inline;">
+                    <div id="div-page" class="input-group">
+                        <input type="text" class="form-control"id="page" name="page" placeholder="Page">
+                        <span class="input-group-btn">
+       	                    <button type="submit" class="btn btn-primary" onclick="
+                                event.preventDefault();
+                                document.getElementById('page-form').submit();">
+                                Go
+                        </button>
+                    </span>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-1">
+                <span class="text-center">{{$pagination->total}}</b><br><small>Pages</small></span>
+            </div>
+
         </div>
     </div>
 @endsection
