@@ -8,6 +8,7 @@ use App\Note;
 use Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+use App\Jobs\ParseClippingToNote;
 
 class ClippingController extends Controller
 {
@@ -20,32 +21,15 @@ class ClippingController extends Controller
         $uploadFilePath = $request->file('uploadFile')->store('clippings');
         $clippingFilePhysicsPath = storage_path().'/app/'.$uploadFilePath;
         $markdownFilePhysicsPath = storage_path().'/app/markdowns/'.basename($uploadFilePath).'.markdown';
+        dispatch(new ParseClippingToNote(Auth::id(), $clippingFilePhysicsPath));
 
-        $clipping = new Clipping($clippingFilePhysicsPath);
-        if ($clipping->parse()){
-            $notes = $clipping->getNotes();
-            foreach ($notes as $index=>$note){
-                $noteModel = new Note;
-                $noteModel->user_id = Auth::id( );
-                $noteModel->title = $note['title'];
-                $noteModel->author = $note['author'];
-                $noteModel->dateTime = $note['dateTime'];
-                $noteModel->text = $note['text'];
-                if (!$noteModel->save()){
-                    // TODO:错误处理
-                }
-            }
-
-            if ($request->isDownloadMarkdown){
-                Session::put('isDownloadMarkdown', 'true');
-                Session::put('markdown',basename($uploadFilePath).'.markdown');
-                $clipping->exportToMarkdown($markdownFilePhysicsPath);
-            }
-
-            return Redirect::to(action('NoteController@index'));
+        if ($request->isDownloadMarkdown){
+            Session::put('isDownloadMarkdown', 'true');
+            Session::put('markdown',basename($uploadFilePath).'.markdown');
+            $clipping->exportToMarkdown($markdownFilePhysicsPath);
         }
 
-        // TODO：错误处理
+        return Redirect::to(action('NoteController@index'));
     }
 
     public function download()
