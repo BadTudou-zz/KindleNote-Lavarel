@@ -58,7 +58,7 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <form action="{{action('ClippingController@store')}}" method="POST" enctype="multipart/form-data">
+                                        <form action="{{action('ClippingController@store')}}" method="POST" enctype="multipart/form-data" style="border-bottom: solid 1px #d3e0e9;">
                                             <!-- CSRF Protection -->
                                             {{ csrf_field() }}
 
@@ -68,7 +68,6 @@
                                             </button>
                                             <input type="checkbox" class="form-check-input" id="isDownloadMarkdown" name="isDownloadMarkdown"><small>MarkDown</small>
                                         </form>
-
                                         <a href="{{ route('home') }}">
                                             <i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home
                                         </a>

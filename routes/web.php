@@ -23,6 +23,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/notes/search/', 'NoteController@search');
 Route::get('/notes/download/', 'NoteController@download');
+Route::get('/logout', 'AuthController@logout');
 
 Route::resource('notes', 'NoteController');
 
@@ -33,7 +34,6 @@ Route::group(['middleware' => 'auth','prefix' => 'users'], function()
     Route::get('{id}', 'UserController@show');
     Route::patch('{id}', 'UserController@update');
     Route::delete('{id}', 'UserController@destroy');
-
 });
 
 Route::group(['middleware' => 'auth','prefix' => 'notes'], function()

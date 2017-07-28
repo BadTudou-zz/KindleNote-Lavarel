@@ -88,18 +88,10 @@
                 </div>
                 <h5>Export your kindle highlights and notes !</h5>
 
-                {{--<div class="links">--}}
-                    {{--<a href="https://laravel.com/docs">Documentation</a>--}}
-                    {{--<a href="https://laracasts.com">Laracasts</a>--}}
-                    {{--<a href="https://laravel-news.com">News</a>--}}
-                    {{--<a href="https://forge.laravel.com">Forge</a>--}}
-                    {{--<a href="https://github.com/laravel/laravel">GitHub</a>--}}
-                {{--</div>--}}
-
                 <div id="social" style="color: #1b95e0">
                     <a type="button"  class="btn btn-secondary btn-sm" href="https://github.com/badtudou"><i class="fa fa-github fa-2x" aria-hidden="true"></i>&nbsp;GitHub</a>
-                    <a type="button"  class="btn btn-secondary btn-sm" href="https://www.zhihu.com/people/du-xiao-dou-"><i class="fa fa-twitter fa-2x" aria-hidden="true"></i>&nbsp;Twitter</a>
-                    <a type="button"  class="btn btn-secondary btn-sm" href="https://www.zhihu.com/people/du-xiao-dou-"><i class="fa fa-facebook fa-2x" aria-hidden="true"></i>&nbsp;Facebook</a>
+                    <a type="button"  class="btn btn-secondary btn-sm" href="http://weibo.com/badtudou"><i class="fa fa-weibo fa-2x" aria-hidden="true"></i>&nbsp;Twitter</a>
+                    <a type="button"  class="btn btn-secondary btn-sm" href="https://www.facebook.com/badtudou"><i class="fa fa-facebook fa-2x" aria-hidden="true"></i>&nbsp;Facebook</a>
                 </div>
             </div>
         </div>

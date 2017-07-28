@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "96098e473b028cdb2529580554a1ae3e",
+    "content-hash": "0ecc6753d1fe07f8069c7d658e94f921",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -147,6 +147,104 @@
                 "parser"
             ],
             "time": "2017-05-14T14:47:48+00:00"
+        },
+        {
+            "name": "evernote/evernote-cloud-sdk-php",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/evernote/evernote-cloud-sdk-php.git",
+                "reference": "c24d691b5ed94ecdf68e738b5dc103b9f2a00022"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/evernote/evernote-cloud-sdk-php/c24d691b5ed94ecdf68e738b5dc103b9f2a00022.zip",
+                "reference": "c24d691b5ed94ecdf68e738b5dc103b9f2a00022",
+                "shasum": ""
+            },
+            "require": {
+                "ezyang/htmlpurifier": "^4.6.0",
+                "php": ">=5.3",
+                "psr/log": "~1.0",
+                "tijsverkoyen/css-to-inline-styles": "~2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Evernote": "src/",
+                    "Thrift": "src/"
+                },
+                "classmap": [
+                    "src/EDAM"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache"
+            ],
+            "authors": [
+                {
+                    "name": "Laurent Sarrazin for Evernote",
+                    "email": "laurent@sarrazin.io",
+                    "homepage": "http://laurent.sarrazin.io",
+                    "role": "Lead developer"
+                }
+            ],
+            "description": "Evernote Cloud SDK for PHP",
+            "homepage": "https://github.com/evernote/evernote-cloud-sdk-php",
+            "keywords": [
+                "api",
+                "evernote",
+                "sdk"
+            ],
+            "time": "2017-05-02T17:38:37+00:00"
+        },
+        {
+            "name": "ezyang/htmlpurifier",
+            "version": "v4.9.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
+                "reference": "95e1bae3182efc0f3422896a3236e991049dac69"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/ezyang/htmlpurifier/95e1bae3182efc0f3422896a3236e991049dac69.zip",
+                "reference": "95e1bae3182efc0f3422896a3236e991049dac69",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "require-dev": {
+                "simpletest/simpletest": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HTMLPurifier": "library/"
+                },
+                "files": [
+                    "library/HTMLPurifier.composer.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Z. Yang",
+                    "email": "admin@htmlpurifier.org",
+                    "homepage": "http://ezyang.com"
+                }
+            ],
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
+            "time": "2017-06-03T02:28:16+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -783,6 +881,56 @@
                 "random"
             ],
             "time": "2017-03-13T16:27:32+00:00"
+        },
+        {
+            "name": "predis/predis",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nrk/predis.git",
+                "reference": "f0210e38881631afeafb56ab43405a92cafd9fd1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/nrk/predis/f0210e38881631afeafb56ab43405a92cafd9fd1.zip",
+                "reference": "f0210e38881631afeafb56ab43405a92cafd9fd1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "suggest": {
+                "ext-curl": "Allows access to Webdis when paired with phpiredis",
+                "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Alessandri",
+                    "email": "suppakilla@gmail.com",
+                    "homepage": "http://clorophilla.net"
+                }
+            ],
+            "description": "Flexible and feature-complete Redis client for PHP and HHVM",
+            "homepage": "http://github.com/nrk/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "time": "2016-06-16T16:22:20+00:00"
         },
         {
             "name": "psr/log",

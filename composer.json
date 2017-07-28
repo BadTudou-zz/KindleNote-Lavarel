@@ -6,8 +6,10 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
+        "evernote/evernote-cloud-sdk-php": "^2.0",
         "laravel/framework": "5.4.*",
-        "laravel/tinker": "~1.0"
+        "laravel/tinker": "~1.0",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

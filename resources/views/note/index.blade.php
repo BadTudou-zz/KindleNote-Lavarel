@@ -99,7 +99,7 @@
                         <h4 class="card-title">
                             <a href="{{action('NoteController@show', ['id' => $note->id])}}" title="{{$note->title}}">{{str_limit(html_entity_decode($note->title), 18)}}</a>
                         </h4>
-                        <h6 class="card-subtitle"> {{str_limit($note->author, 36)}}</h6>
+                        <h6 class="card-subtitle"> {{str_limit($note->author, 34)}}</h6>
                     </div>
                     <div class="card-block" style="margin: 0px; padding: 0px">
                         <p class="card-subtitle text-muted" style="margin-top: 5px;"><small>{{$note->dateTime}}</small></p>
