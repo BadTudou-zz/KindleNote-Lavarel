@@ -97,11 +97,50 @@
                 </div>
             </div>
         </nav>
+        <ul id="notification-ul" class="col-lg-offset-1 col-lg-10 text-center" style="list-style:none;">
+        @if (Auth::user())
+            @foreach (Auth::user()->unreadNotifications as $notification)
+                <li>
+                    <div class="alert alert-{{$notification->data['type']}}">{{$notification->data['msg']}}</div>
+                </li>
+            @endforeach
 
+            <form id="notification-form" action="{{action('NotificationController@markAllAsRead')}}" method="POST">
+                {{-- <input type="text" name="ids" value="{{Auth::user()->unreadNotifications->implode('id', ', ')}}"> --}}
+            </form>
+        @endif
+        </ul>
         @yield('content')
     </div>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script type="text/javascript">
+        setTimeout(function(){
+            if ($('#notification-ul').children().length != 0){
+                markAllAsRead();
+                console.log('test');
+            }
+        }, 3000);
+
+        function markAllAsRead(){
+            var url = $('#notification-form').attr('action');
+            var token = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {"_token":token},
+                dataType: "json",
+                success: function(result){
+                    console.log(result);
+                    if(result.state){
+                        $("#notification-ul").remove();
+                        console.log('ok');
+                    }
+                }
+            });
+        }
+
+    </script>
 </body>
 </html>

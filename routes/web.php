@@ -51,3 +51,9 @@ Route::group(['middleware' => 'auth','prefix' => 'clipping'], function()
     Route::post('/', 'ClippingController@store');
     Route::get('/download', 'ClippingController@download');
 });
+
+Route::group(['middleware' => 'auth','prefix' => 'notification'], function()
+{
+    Route::post('/', 'NotificationController@markAllAsRead');
+    Route::get('/download', 'ClippingController@download');
+});

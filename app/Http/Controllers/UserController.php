@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use Validator;
 use App\User;
 use App\Note;
 use Illuminate\Http\Request;
-use Auth;
-use Validator;
 use Illuminate\Support\Facades\Redirect;
+use App\Notifications\SystemNotification;
+
 class UserController extends Controller
 {
     /**
@@ -17,6 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
+       
         return view('user.show', ['user'=>Auth::user()]);
     }
 
@@ -72,7 +75,6 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        echo 'update'.$id;
         $validator = Validator::make($request->all(), [
             'name'=>'bail|required',
             'email'=>'bail|required|email',
@@ -90,6 +92,7 @@ class UserController extends Controller
         $user->email = $request->email;
         //$note->password = $request->password;
         if($user->save()){
+            Auth::user()->notify(new SystemNotification('success', "更新个人资料成功"));
             return Redirect::to(action('UserController@show', Auth::id()));
         }
         else{
