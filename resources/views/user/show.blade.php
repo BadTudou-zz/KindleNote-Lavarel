@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container col-lg-offset-3">
+    <div class="container col-lg-offset-3 col-lg-9">
         <form action="{{action('UserController@update', $user->id)}}" method="post">
             <!-- CSRF Protection -->
              {{ csrf_field() }}

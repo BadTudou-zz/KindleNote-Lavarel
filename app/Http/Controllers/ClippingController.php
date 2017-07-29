@@ -9,6 +9,7 @@ use Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use App\Jobs\ParseClippingToNote;
+use App\Notifications\SystemNotification;
 
 class ClippingController extends Controller
 {
@@ -28,7 +29,7 @@ class ClippingController extends Controller
             Session::put('markdown',basename($uploadFilePath).'.markdown');
             $clipping->exportToMarkdown($markdownFilePhysicsPath);
         }
-
+        Auth::user()->notify(new SystemNotification('info', "笔记正在解析"));
         return Redirect::to(action('NoteController@index'));
     }
 
