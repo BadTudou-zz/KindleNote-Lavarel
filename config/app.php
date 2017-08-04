@@ -163,11 +163,13 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        
 
         /*
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+        Ishannz\LaravelEvernote\LaravelEvernoteServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -177,6 +179,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
 
     ],
 
@@ -226,6 +229,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Evernote' => Ishannz\LaravelEvernote\Facades\Evernote::class,
 
     ],
 

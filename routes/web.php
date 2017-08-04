@@ -57,3 +57,9 @@ Route::group(['middleware' => 'auth','prefix' => 'notification'], function()
     Route::post('/', 'NotificationController@markAllAsRead');
     Route::get('/download', 'ClippingController@download');
 });
+
+Route::group(['middleware' => 'auth','prefix' => 'oauth/evernote'], function()
+{
+    Route::get('/', 'Oauth\EverNoteController@oauth');
+    Route::get('/result', 'Oauth\EverNoteController@result');
+});
