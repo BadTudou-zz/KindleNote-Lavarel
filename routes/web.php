@@ -63,3 +63,8 @@ Route::group(['middleware' => 'auth','prefix' => 'oauth/evernote'], function()
     Route::get('/', 'Oauth\EverNoteController@oauth');
     Route::get('/result', 'Oauth\EverNoteController@result');
 });
+
+Route::group(['middleware' => 'auth','prefix' => 'notes/export'], function()
+{
+    Route::get('/evernote/{id}', 'EverNoteController@store');
+});
