@@ -73,10 +73,10 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @if (Auth::check())
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ url('/home') }}">@lang('welcome.Home')</a>
                     @else
-                        <a href="{{ url('/login') }}">Login</a>
-                        <a href="{{ url('/register') }}">Register</a>
+                        <a href="{{ url('/login') }}">@lang('welcome.Login')</a>
+                        <a href="{{ url('/register') }}">@lang('welcome.Register')</a>
                     @endif
                 </div>
             @endif
@@ -86,12 +86,12 @@
                 <div class="title m-b-md">
                     {{ config('app.name', 'Laravel') }}
                 </div>
-                <h5>Export your kindle highlights and notes !</h5>
+                <h5>@lang('welcome.Introduce')</h5>
 
                 <div id="social" style="color: #1b95e0">
-                    <a type="button"  class="btn btn-secondary btn-sm" href="https://github.com/badtudou"><i class="fa fa-github fa-2x" aria-hidden="true"></i>&nbsp;GitHub</a>
-                    <a type="button"  class="btn btn-secondary btn-sm" href="http://weibo.com/badtudou"><i class="fa fa-weibo fa-2x" aria-hidden="true"></i>&nbsp;Twitter</a>
-                    <a type="button"  class="btn btn-secondary btn-sm" href="https://www.facebook.com/badtudou"><i class="fa fa-facebook fa-2x" aria-hidden="true"></i>&nbsp;Facebook</a>
+                    <a type="button"  class="btn btn-secondary btn-sm" href="https://github.com/badtudou"><i class="fa fa-github fa-2x" aria-hidden="true"></i>&nbsp;@lang('welcome.GitHub')</a>
+                    <a type="button"  class="btn btn-secondary btn-sm" href="http://weibo.com/badtudou"><i class="fa fa-weibo fa-2x" aria-hidden="true"></i>&nbsp;@lang('welcome.Weibo')</a>
+                    <a type="button"  class="btn btn-secondary btn-sm" href="https://www.facebook.com/badtudou"><i class="fa fa-facebook fa-2x" aria-hidden="true"></i>&nbsp;@lang('welcome.Facebook')</a>
                 </div>
             </div>
         </div>
