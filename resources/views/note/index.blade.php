@@ -124,18 +124,31 @@
                         <p class="card-text" style="height: 70px;">{{str_limit($note->text,120)}}</p>
 
                         <!-- operation of the notes -->
-                        <a href="{{action('NoteController@edit', ['id' => $note->id])}}" class="card-link" > <i class="fa fa-1x fa-pencil" aria-hidden="true"></i>&nbsp;编辑</a>
+                        <div style="display: inline;">
+                            <a href="{{action('NoteController@edit', ['id' => $note->id])}}" class="card-link" > <i class="fa fa-1x fa-pencil" aria-hidden="true"></i>&nbsp;编辑</a>
+                        </div>
 
                         <form action="{{action('NoteController@markdown',['id' => $note->id])}}" method="GET" style="display: inline;">
                             {{ csrf_field() }}
                             <button type="submit" class="btn btn-link"><i class="fa fa-1x fa-download" aria-hidden="true"></i>&nbsp;下载</button>
                         </form>
 
-                        <form action="{{action('NoteController@destroy',['id' => $note->id])}}" method="post" style="margin-left:10px; display: inline;">
+                        <form action="{{action('NoteController@destroy',['id' => $note->id])}}" method="post" style="display: inline;">
                             {{ method_field('DELETE') }}
                             {{ csrf_field() }}
-                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-1x fa-trash" aria-hidden="true"></i>&nbsp;删除</button>
+                            <button type="submit" class="btn btn-link" style="color:#C9302C;"><i class="fa fa-1x fa-trash" aria-hidden="true"></i>&nbsp;删除</button>
                         </form>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cloud-download" aria-hidden="true"></i>&nbsp;导出</button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{action('EverNoteController@store', ['id' => $note->id])}}"> <img src="{{URL::asset('/images/evernote_logo.png')}}" style="width: 24px; height: 24px;">&nbsp;Evernote</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Separated link</a>
+                            </div>
+                        </div>
 
                         <span style="float: right">
                             <input type="checkbox" class="form-check-input batch" id="batch{{$note->id}}" name="batch[]">

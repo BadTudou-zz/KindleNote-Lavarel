@@ -25,7 +25,7 @@
 
                     <!-- Collapsed Hamburger -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
+                        <span class="sr-only">@lang('layouts/app.ToggleNavigation')</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -48,8 +48,8 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
+                            <li><a href="{{ route('login') }}">@lang('layouts/app.Login')</a></li>
+                            <li><a href="{{ route('register') }}">@lang('layouts/app.Register')</a></li>
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -64,28 +64,27 @@
 
                                             <input type="file" class="form-control-file" id="uploadFile" name="uploadFile">
                                             <button type="submit" class="btn btn-primary btn-link">
-                                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>Upload
+                                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>@lang('layouts/app.Upload')
                                             </button>
 
-                                            <input type="checkbox" class="form-check-input" id="isDownloadMarkdown" name="isDownloadMarkdown"><small>@lang('layouts/app.Markdown')</small>
-
+                                            <input type="checkbox" class="form-check-input" id="isDownloadMarkdown" name="isDownloadMarkdown"><small>@lang('layouts/app.Markown')</small>
                                         </form>
                                         <a href="{{ route('home') }}">
-                                            <i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home
+                                            <i class="fa fa-home" aria-hidden="true"></i>&nbsp;@lang('layouts/app.Home')
                                         </a>
 
                                         <a href="{{ action('NoteController@index') }}">
-                                            <i class="fa fa-book" aria-hidden="true"></i>&nbsp;Notes
+                                            <i class="fa fa-book" aria-hidden="true"></i>&nbsp;@lang('layouts/app.Notes')
                                         </a>
 
                                         <a href="{{ action('UserController@show', ['id'=>Auth::id()]) }}">
-                                            <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;Setting
+                                            <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;@lang('layouts/app.Setting')
                                         </a>
 
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                            <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;Logout
+                                            <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;@lang('layouts/app.Logout')
                                         </a>
 
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
