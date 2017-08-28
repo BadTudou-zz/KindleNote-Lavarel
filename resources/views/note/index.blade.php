@@ -18,6 +18,23 @@
                 <button type="submit"  class="btn btn-primary btn-sm" onclick="batch('download')"><i class="fa fa-1x fa-download" aria-hidden="true" ></i>&nbsp;下载</button>
             </form>
 
+            
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cloud-download" aria-hidden="true"></i>&nbsp;导出</button>
+                <div class="dropdown-menu">
+                    <form id="batchForm" action="{{action('NoteController@batch',['action'=>'export/evernote'])}}" method="POST" style="display: inline;">
+                        {{ csrf_field() }}
+                       {{--  <button type="submit"  class="btn btn-primary btn-sm" onclick="batch('download')"><i class="fa fa-1x fa-download" aria-hidden="true" ></i>&nbsp;下载</button> --}}
+                       <button type="submit"  class="btn" onclick="batch('export/evernote')"> <img src="{{URL::asset('/images/evernote_logo.png')}}" style="width: 24px; height: 24px;">&nbsp;Evernote</button>
+                    </form>
+                        
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>
+                </div>
+            </div>
+
             <form id="batchForm" action="{{action('NoteController@batch',['action'=>'delete'])}}" method="post" style="margin-left:10px; display: inline;">
                 {{ csrf_field() }}
                 <button type="submit" class="btn btn-danger btn-sm" onclick="batch('delete')"><i class="fa fa-1x fa-trash" aria-hidden="true"></i>&nbsp;删除</button>

@@ -66,6 +66,7 @@
                                             <button type="submit" class="btn btn-primary btn-link">
                                                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>@lang('layouts/app.Upload')
                                             </button>
+
                                             <input type="checkbox" class="form-check-input" id="isDownloadMarkdown" name="isDownloadMarkdown"><small>@lang('layouts/app.Markown')</small>
                                         </form>
                                         <a href="{{ route('home') }}">
