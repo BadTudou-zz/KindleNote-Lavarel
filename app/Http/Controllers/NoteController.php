@@ -10,6 +10,9 @@ use Auth;
 use DB;
 use URL;
 use Illuminate\Support\Facades\Storage;
+use EDAM\Error\Types\EDAMUserException;
+use App\Notifications\SystemNotification;
+use App\Evernote;
 
 class NoteController extends Controller
 {
@@ -193,6 +196,8 @@ class NoteController extends Controller
             return ;
         }
 
+        $token = $request->session()->get('token');
+
         switch($request->action){
             case 'download':
                 $this->batchDownload($ids);
@@ -200,6 +205,11 @@ class NoteController extends Controller
 
             case 'delete':
                 $this->batchDelete($ids);
+                break;
+
+            case 'export/evernote':
+            case 'export/youdao':
+                $this->batchExport($token, $request->action, $ids);
                 break;
         }
     }
@@ -227,6 +237,44 @@ class NoteController extends Controller
             }
         }
         echo json_encode(['state'=>true, 'data'=>URL::action('NoteController@index')]);
+    }
+
+    private function batchExport($token, $target, $ids)
+    {
+        switch ($target) {
+            case 'export/evernote':
+                $this->batchExportEvernote($token, $ids);
+                break;
+
+            case 'export/youdao':
+                break;
+            default:
+                # code...
+                break;
+        }
+    }
+
+    private function batchExportEvernote($token, $ids)
+    {
+        logger('批量导出到印象笔记');
+        try{
+            $evernote = new Evernote($token);
+            foreach ($ids as $id){
+                $note = Note::find($id);
+                $title = html_entity_decode($note->title.$note->author);
+                $content = html_entity_decode(sprintf("%s\n%s",$note->dateTime, $note->text));
+                if (!$evernote->create($title, $content)) {
+                    Auth::user()->notify(new SystemNotification('error', "笔记导出到EverNote失败"));
+                    echo json_encode(['state'=>false, 'data'=>URL::action('NoteController@index')]);
+                }
+            }
+            Auth::user()->notify(new SystemNotification('success', "笔记导出到EverNote成功"));
+            echo json_encode(['state'=>true, 'data'=>URL::action('NoteController@index')]);
+        } catch (\Exception $edue) {
+            echo json_encode(['state'=>false, 'data'=>URL::action('Oauth\EverNoteController@oauth')]);
+        }
+        
+
     }
 
     public function download(Request $request)

@@ -46,9 +46,19 @@ function batch(action) {
                     case 'delete':
                         window.location.href = result.data;
                         break;
+                    case 'export/evernote':
+                        console.log('evernote'+result.data);
+                        window.location.href = result.data;
+                        break;
                 }
             }else{
-                console.log('error');
+                switch (action){
+                    case 'export/evernote':
+                        window.open(result.data);
+                        location.reload();
+                        break;
+                }
+                console.log('error'+result.data);
             }
         },
         error:function(xhr){
