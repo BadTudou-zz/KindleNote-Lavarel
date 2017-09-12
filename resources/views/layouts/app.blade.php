@@ -67,7 +67,7 @@
                                                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>@lang('layouts/app.Upload')
                                             </button>
 
-                                            <input type="checkbox" class="form-check-input" id="isDownloadMarkdown" name="isDownloadMarkdown"><small>@lang('layouts/app.Markown')</small>
+                                            <input type="checkbox" class="form-check-input" id="isDownloadMarkdown" name="isDownloadMarkdown"><small>@lang('layouts/app.Markdown')</small>
                                         </form>
                                         <a href="{{ route('home') }}">
                                             <i class="fa fa-home" aria-hidden="true"></i>&nbsp;@lang('layouts/app.Home')

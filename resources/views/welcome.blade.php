@@ -93,8 +93,19 @@
                     <a type="button"  class="btn btn-secondary btn-sm" href="http://weibo.com/badtudou"><i class="fa fa-weibo fa-2x" aria-hidden="true"></i>&nbsp;@lang('welcome.Weibo')</a>
                     <a type="button"  class="btn btn-secondary btn-sm" href="https://www.facebook.com/badtudou"><i class="fa fa-facebook fa-2x" aria-hidden="true"></i>&nbsp;@lang('welcome.Facebook')</a>
                 </div>
+                
+
+                <div id="div-footer" class="col-lg-12 text-center" style="margin-top: 50px">
+                    <div id="div-footer--copyright">
+                        <strong>Copyright © 2016 BadTudou. All rights reserved.<br/></strong>
+                    </div>
+                    <div id="div-footer--ICP">
+                        <strong>渝ICP备16010823号-1 <a href="http://www.miit.gov.cn/">工信部备案查询</a></strong>
+                    </div>
+                </div>
             </div>
         </div>
+        
 
     </body>
 </html>
